@@ -23,8 +23,10 @@ method can-build(--> Bool) {
 
 method build() {
     my $destdir = '.';
+    my $workdir = '.';
+
     my %vars = backend-values();
-    %vars<DESTDIR> = '.';
+    %vars<DESTDIR> = $*CWD;
     my $meta = $.collapsed-meta;
     my %makefile-variables = $meta<makefile-variables>;
     for %makefile-variables.values -> $value is rw {
@@ -44,6 +46,11 @@ method build() {
         $makefile ~~ s:g/\%$k\%/$v/;
     }
     $src-dir.child('Makefile').spurt: $makefile;
+
+    mkdir "$workdir/resources" unless "$workdir/resources".IO.e;
+    mkdir "$workdir/resources/libraries" unless "$workdir/resources/libraries".IO.e;
+    temp $*CWD = $src-dir;
+    run 'make';
 }
 
 sub backend-values() {
