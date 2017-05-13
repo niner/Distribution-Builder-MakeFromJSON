@@ -7,7 +7,7 @@ has $.meta;
 has $!collapsed-meta;
 
 method collapsed-meta() {
-    $!collapsed-meta //= system-collapse($!meta<build>);
+    $!collapsed-meta //= $!meta<build> ?? system-collapse($!meta<build>) !! {};
 }
 
 method can-build(--> Bool) {
@@ -22,35 +22,54 @@ method can-build(--> Bool) {
 }
 
 method build() {
-    my $destdir = '.';
+    my $dest-dir = '.';
     my $workdir = '.';
+    my $meta = $.collapsed-meta;
+    my $src-dir = ($meta<src-dir> || '.').IO;
 
+    configure($meta, $src-dir, $dest-dir) if $meta<configure-bin>:exists;
+    process-makefile-template($meta, $src-dir, $dest-dir) if $src-dir.child('Makefile.in').e;
+
+    mkdir "$workdir/resources" unless "$workdir/resources".IO.e;
+    mkdir "$workdir/resources/libraries" unless "$workdir/resources/libraries".IO.e;
+    temp $*CWD = $src-dir;
+    run 'make'; # check for gmake here
+}
+
+sub configure($meta, $src-dir, $dest-dir) {
+    temp $*CWD = $src-dir;
+    run $meta<configure-bin>;
+}
+
+sub process-makefile-template($meta, $src-dir, $dest-dir) {
     my %vars = backend-values();
     %vars<DESTDIR> = $*CWD;
-    my $meta = $.collapsed-meta;
-    my %makefile-variables = $meta<makefile-variables>;
+    my %makefile-variables = $meta<makefile-variables> if $meta<makefile-variables>;
     for %makefile-variables.values -> $value is rw {
-        next unless $value ~~ Map
-            and $value<resource>:exists
-            and $value<resource>.starts-with('libraries/');
-
-        my $path = $value<resource>.substr(10); # strip off libraries/
-        $value = $destdir.IO.child('resources').child('libraries')
-            .child($*VM.platform-library-name($path.IO)).Str;
+        next unless $value ~~ Map;
+        if $value<resource>:exists and $value<resource>.starts-with('libraries/')
+        {
+            my $path = $value<resource>.substr(10); # strip off libraries/
+            $value = $dest-dir.IO.child('resources').child('libraries')
+                .child($*VM.platform-library-name($path.IO)).Str;
+        }
+        if $value<platform-library-name>:exists {
+            $value = $*VM.platform-library-name($value<platform-library-name>.IO);
+        }
+        if $value<run>:exists {
+            $value = chomp run(|$value<run>, :out).out.slurp;
+        }
+        if $value<env>:exists {
+            $value = %*ENV{$value<env>};
+        }
     }
     %vars.push: %makefile-variables;
 
-    my $src-dir = ($meta<src-dir> || '.').IO;
     my $makefile = $src-dir.child('Makefile.in').slurp;
     for %vars.kv -> $k, $v {
         $makefile ~~ s:g/\%$k\%/$v/;
     }
     $src-dir.child('Makefile').spurt: $makefile;
-
-    mkdir "$workdir/resources" unless "$workdir/resources".IO.e;
-    mkdir "$workdir/resources/libraries" unless "$workdir/resources/libraries".IO.e;
-    temp $*CWD = $src-dir;
-    run 'make';
 }
 
 sub backend-values() {
