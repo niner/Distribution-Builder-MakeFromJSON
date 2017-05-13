@@ -12,8 +12,8 @@
     "Distribution::Builder::MakeFromJSON" : "lib/Distribution/Builder/MakeFromJSON.pm6"
   },
   "resources" : [ ],
-  "source-url" : "",
+  "source-url" : "https://github.com/niner/Distribution-Builder-MakeFromJSON.git",
   "tags" : [ ],
   "test-depends" : [ ],
-  "version" : "*"
+  "version" : "0.1"
 }
