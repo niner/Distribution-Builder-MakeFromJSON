@@ -64,7 +64,7 @@ sub process-makefile-template($meta, $src-dir, $dest-dir) {
             $value = $*VM.platform-library-name($value<platform-library-name>.IO);
         }
         if $value<run>:exists {
-            $value = chomp run(|$value<run>, :out).out.slurp;
+            $value = chomp run(|$value<run>, :out).out.lines.join('');
         }
         if $value<env>:exists {
             $value = %*ENV{$value<env>};
