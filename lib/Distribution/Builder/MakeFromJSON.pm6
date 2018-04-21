@@ -33,7 +33,7 @@ method build() {
     mkdir "$workdir/resources" unless "$workdir/resources".IO.e;
     mkdir "$workdir/resources/libraries" unless "$workdir/resources/libraries".IO.e;
     temp $*CWD = $src-dir;
-    run 'make'; # check for gmake here
+    run 'make', |($meta<make-target> // Nil); # check for gmake here
 }
 
 sub configure($meta, $src-dir, $dest-dir) {
