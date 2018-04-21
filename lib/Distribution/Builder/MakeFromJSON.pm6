@@ -1,5 +1,5 @@
 use v6;
-unit class Distribution::Builder::MakeFromJSON;
+unit class Distribution::Builder::MakeFromJSON:ver<0.2>;
 
 use System::Query;
 
@@ -135,7 +135,7 @@ sub backend-values() {
 
 =head1 NAME
 
-Distribution::Builder::MakeFromJSON - blah blah blah
+Distribution::Builder::MakeFromJSON - Makefile based distribution builder
 
 =head1 SYNOPSIS
 
@@ -143,7 +143,9 @@ Distribution::Builder::MakeFromJSON - blah blah blah
 
 =head1 DESCRIPTION
 
-Distribution::Builder::MakeFromJSON is ...
+Distribution::Builder::MakeFromJSON uses information from your META6.json and
+the running system to fill variabls in a Makefile.in template and build your
+distribution.
 
 =head1 AUTHOR
 
