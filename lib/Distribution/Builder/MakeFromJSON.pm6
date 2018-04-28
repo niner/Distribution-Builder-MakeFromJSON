@@ -24,7 +24,7 @@ method can-build(--> Bool) {
 method build(IO() $work-dir = $*CWD) {
     my $dest-dir = '.';
     my $meta = $.collapsed-meta;
-    my $src-dir = ($work-dir.child($meta<src-dir>) || $*CWD).IO;
+    my $src-dir = $work-dir.child($meta<src-dir> // '');
 
     configure($meta, $src-dir, $dest-dir) if $meta<configure-bin>:exists;
     process-makefile-template($meta, $src-dir, $dest-dir) if $src-dir.child('Makefile.in').e;
