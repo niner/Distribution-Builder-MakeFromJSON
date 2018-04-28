@@ -21,7 +21,7 @@ method can-build(--> Bool) {
     }
 }
 
-method build($work-dir = $*CWD) {
+method build(IO() $work-dir = $*CWD) {
     my $dest-dir = '.';
     my $meta = $.collapsed-meta;
     my $src-dir = ($work-dir.child($meta<src-dir>) || $*CWD).IO;
@@ -29,8 +29,8 @@ method build($work-dir = $*CWD) {
     configure($meta, $src-dir, $dest-dir) if $meta<configure-bin>:exists;
     process-makefile-template($meta, $src-dir, $dest-dir) if $src-dir.child('Makefile.in').e;
 
-    mkdir "$workdir/resources" unless "$workdir/resources".IO.e;
-    mkdir "$workdir/resources/libraries" unless "$workdir/resources/libraries".IO.e;
+    mkdir "$work-dir/resources" unless "$work-dir/resources".IO.e;
+    mkdir "$work-dir/resources/libraries" unless "$work-dir/resources/libraries".IO.e;
 
 # check for gmake here
     my $make = 'make';
@@ -43,8 +43,7 @@ method build($work-dir = $*CWD) {
 }
 
 sub configure($meta, $src-dir, $dest-dir) {
-    temp $*CWD = $src-dir;
-    run $meta<configure-bin>;
+    run $meta<configure-bin>, :cwd($src-dir);
 }
 
 sub process-makefile-template($meta, $src-dir, $dest-dir) {
