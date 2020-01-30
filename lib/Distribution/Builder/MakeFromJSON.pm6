@@ -1,5 +1,5 @@
 use v6;
-unit class Distribution::Builder::MakeFromJSON:ver<0.4>;
+unit class Distribution::Builder::MakeFromJSON:ver<0.5>;
 
 use System::Query;
 
