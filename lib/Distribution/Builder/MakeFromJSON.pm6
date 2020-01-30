@@ -49,6 +49,7 @@ sub configure($meta, $src-dir, $dest-dir) {
 sub process-makefile-template($meta, $src-dir, $dest-dir) {
     my %vars = backend-values();
     %vars<DESTDIR> = $*CWD;
+    %vars<EXECUTABLE> = $*EXECUTABLE;
     my %makefile-variables = $meta<makefile-variables> if $meta<makefile-variables>;
     for %makefile-variables.values -> $value is rw {
         next unless $value ~~ Map;
