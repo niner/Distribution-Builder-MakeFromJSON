@@ -1,7 +1,8 @@
 Revision history for Distribution-Builder-MakeFromJSON
 
 {{$NEXT}}
-
+0.6  2020-02-01T09:48:00+01:00
+    - Fix META information
 0.5  2020-01-30T12:39:09+01:00
     - Make $*EXECUTABLE available as Makefile variable
 0.4  2018-04-22T13:10:28+02:00

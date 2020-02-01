@@ -1,11 +1,21 @@
 {
+  "meta-version": 1,
+  "auth" : "github:niner",
   "authors" : [
     "Stefan Seifert"
   ],
-  "build-depends" : [ ],
-  "depends" : [
-    "System::Query"
-  ],
+  "depends" : {
+    "build": {
+      "requires": [
+        "System::Query"
+      ]
+    },
+    "runtime": {
+      "requires": [
+        "System::Query"
+      ]
+    }
+  },
   "description" : "Makefile based distribution builder",
   "license" : "Artistic-2.0",
   "name" : "Distribution::Builder::MakeFromJSON",
