@@ -1,23 +1,24 @@
 {
-  "meta-version": 1,
   "auth" : "github:niner",
   "authors" : [
     "Stefan Seifert"
   ],
+  "build-depends" : [ ],
   "depends" : {
-    "build": {
-      "requires": [
+    "build" : {
+      "requires" : [
         "System::Query"
       ]
     },
-    "runtime": {
-      "requires": [
+    "runtime" : {
+      "requires" : [
         "System::Query"
       ]
     }
   },
   "description" : "Makefile based distribution builder",
   "license" : "Artistic-2.0",
+  "meta-version" : 1,
   "name" : "Distribution::Builder::MakeFromJSON",
   "perl" : "6.c",
   "provides" : {
@@ -27,5 +28,5 @@
   "source-url" : "https://github.com/niner/Distribution-Builder-MakeFromJSON.git",
   "tags" : [ ],
   "test-depends" : [ ],
-  "version" : "0.5"
+  "version" : "0.6"
 }
