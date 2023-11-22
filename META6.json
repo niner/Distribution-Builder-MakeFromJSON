@@ -12,7 +12,13 @@
     },
     "runtime" : {
       "requires" : [
-        "System::Query"
+        {
+          "name" : "System::Query"
+        },
+        {
+          "from" : "bin",
+          "name" : "make"
+        }
       ]
     }
   },
